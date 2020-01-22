@@ -26,13 +26,14 @@ def read_pair(pair):
 
 def create_h5_from_pair(pair):
     raw, decon = read_pair(pair)
-    raw=raw.astype(decon.dtype)
+    raw=raw.astype(np.float)
     raw -= 100 # fix camera offset
     np.clip(raw, a_min=0, a_max=None)
     outfile = "/g/ml2018/cryo18/h5/" + pair[0].stem + ".h5"
     print("      - '" +outfile + "'")
     with h5py.File(outfile, "w") as f:
-        f["raw"]=raw
+        dset = f.create_dataset("raw", raw.shape, dtype='<f4')
+        f["raw"][:]=raw[:]
         f["deconvolved"]=decon
     return("done")
 
