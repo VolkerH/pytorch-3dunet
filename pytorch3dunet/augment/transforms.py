@@ -469,6 +469,22 @@ class Standardize:
         return (m - self.mean) / np.clip(self.std, a_min=self.eps, a_max=None)
 
 
+class StandardizeOffset:
+    """
+    Apply Z-score normalization to a given input tensor, i.e. re-scaling the values to be 0-mean and 1-std.
+    Mean and std parameter have to be provided explicitly.
+    """
+
+    def __init__(self, mean, std, eps=1e-6, offset=100,  **kwargs):
+        self.offset = offset
+        self.mean = mean
+        self.std = std
+        self.eps = eps
+
+    def __call__(self, m):
+        m -= self.offset
+        return (m -  self.mean) / np.clip(self.std, a_min=self.eps, a_max=None)
+
 class Normalize:
     """
     Apply simple min-max scaling to a given input tensor, i.e. shrinks the range of the data in a fixed range of [-1, 1].

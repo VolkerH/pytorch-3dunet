@@ -1,0 +1,223 @@
+# use a fixed random seed to guarantee that when you run the code twice you will get the same outcome
+manual_seed: 0
+# model configuration
+model:
+  # model class
+  name: UNet3D
+  # number of input channels to the model
+  in_channels: 1
+  # number of output channels
+  out_channels: 1
+  # determines the order of operators in a single layer (gcr - GroupNorm+Conv3d+ReLU)
+  layer_order: gcr
+  # feature maps scale factor
+  f_maps: 32
+  # number of groups in the groupnorm
+  num_groups: 8
+  # apply element-wise nn.Sigmoid after the final 1x1 convolution, otherwise apply nn.Softmax
+  final_sigmoid: false
+# trainer configuration
+trainer:
+  # path to the checkpoint directory
+  checkpoint_dir: 3dunet
+  # path to latest checkpoint; if provided the training will be resumed from that checkpoint
+  resume: null
+  # how many iterations between validations
+  validate_after_iters: 500
+  # how many iterations between tensorboard logging
+  log_after_iters: 50
+  # max number of epochs
+  epochs: 100
+  # max number of iterations
+  iters: 100000
+  # model with higher eval score is considered better
+  eval_score_higher_is_better: true
+# optimizer configuration
+optimizer:
+  # initial learning rate
+  learning_rate: 0.0002
+  # weight decay
+  weight_decay: 0.0001
+# loss function configuration
+loss:
+  # loss function to be used during training
+  name: SmoothL1Loss
+  # A manual rescaling weight given to each class.
+  weight: null
+  # a target value that is ignored and does not contribute to the input gradient
+  ignore_index: null
+# evaluation metric configuration
+eval_metric:
+  name: PSNR
+  # a target label that is ignored during metric evaluation
+  ignore_index: null
+lr_scheduler:
+  name: ReduceLROnPlateau
+  mode: min
+  factor: 0.5
+  patience: 20
+# data loaders configuration
+loaders:
+  # how many subprocesses to use for data loading
+  num_workers: 4
+  # path to the raw data within the H5
+  raw_internal_path: raw
+  # path to the the label data within the H5
+  label_internal_path: deconvolved
+  # path to the pixel-wise weight map withing the H5 if present
+  weight_internal_path: null
+  # configuration of the train loader
+  train:
+    # paths to the training datasets
+    file_paths:
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0109_488nm_0212546msec_0018430836msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0180_488nm_0350994msec_0018569284msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0059_488nm_0115048msec_0018333338msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0134_488nm_0261295msec_0018479585msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0233_488nm_0454342msec_0018672632msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0161_488nm_0313944msec_0018532234msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0076_488nm_0148197msec_0018366487msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0281_488nm_0547940msec_0018766230msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0157_488nm_0306144msec_0018524434msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0058_488nm_0113098msec_0018331388msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0184_488nm_0358794msec_0018577084msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0141_488nm_0274945msec_0018493235msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0005_488nm_0009750msec_0018228040msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0126_488nm_0245696msec_0018463986msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0277_488nm_0540140msec_0018758430msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0221_488nm_0430942msec_0018649232msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0048_488nm_0093598msec_0018311888msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0212_488nm_0413393msec_0018631683msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0284_488nm_0553790msec_0018772080msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0107_488nm_0208646msec_0018426936msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0204_488nm_0397793msec_0018616083msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0098_488nm_0191097msec_0018409387msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0106_488nm_0206697msec_0019578040msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0419_488nm_0817035msec_0020188378msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0099_488nm_0193047msec_0019564390msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0506_488nm_0986682msec_0020358025msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0254_488nm_0495291msec_0019866634msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0253_488nm_0493341msec_0019864684msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0172_488nm_0335394msec_0019706737msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0083_488nm_0161847msec_0019533190msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0390_488nm_0760487msec_0020131830msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0111_488nm_0216446msec_0019587789msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0447_488nm_0871634msec_0020242977msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0160_488nm_0311995msec_0019683338msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0116_488nm_0226196msec_0019597539msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0589_488nm_1148529msec_0020519872msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0289_488nm_0563540msec_0019934883msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0122_488nm_0237896msec_0019609239msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0181_488nm_0352944msec_0019724287msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0217_488nm_0423143msec_0019794486msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0535_488nm_1043231msec_0020414574msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0057_488nm_0111148msec_0019482491msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0500_488nm_0974983msec_0020346326msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0310_488nm_0604489msec_0019975832msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0311_488nm_0606439msec_0019977782msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0088_488nm_0171597msec_0019542940msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0430_488nm_0838485msec_0020209828msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0208_488nm_0405593msec_0019776936msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0564_488nm_1099780msec_0020471123msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0494_488nm_0963283msec_0020334626msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0138_488nm_0269095msec_0019640438msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0065_488nm_0126748msec_0019498091msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0162_488nm_0315895msec_0019687238msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0026_488nm_0050699msec_0019422042msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0517_488nm_1008132msec_0020379475msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0325_488nm_0633739msec_0020005082msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0400_488nm_0779986msec_0020151329msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0262_488nm_0510891msec_0019882234msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0573_488nm_1117330msec_0020488673msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0330_488nm_0643489msec_0020014832msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0420_488nm_0818985msec_0020190328msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0566_488nm_1103680msec_0020475023msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0561_488nm_1093930msec_0020465273msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0480_488nm_0935983msec_0020307326msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0363_488nm_0707837msec_0020079180msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0284_488nm_0553790msec_0019925133msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0066_488nm_0128698msec_0019500041msecAbs.h5'
+
+    # SliceBuilder configuration, i.e. how to iterate over the input volume patch-by-patch
+    slice_builder:
+      # SliceBuilder class
+      name: SliceBuilder
+      # train patch size given to the network (adapt to fit in your GPU mem, generally the bigger patch the better)
+      patch_shape: [64, 160, 160]
+      # train stride between patches
+      stride_shape: [32, 100, 100]
+
+    # data transformations/augmentations
+    transformer:
+      raw:
+        - name: Standardize
+        - name: RandomFlip
+        - name: RandomRotate90
+        - name: RandomRotate
+          # rotate only in ZY only
+          axes: [[2, 1]]
+          angle_spectrum: 25
+          mode: reflect
+        - name: AdditiveGaussianNoise
+        - name: AdditivePoissonNoise
+        - name: ToTensor
+          expand_dims: true
+      label:
+        - name: Standardize
+        - name: RandomFlip
+        - name: RandomRotate90
+        - name: RandomRotate
+          # rotate only in ZY only
+          axes: [[2, 1]]
+          angle_spectrum: 25
+          mode: reflect
+        - name: ToTensor
+          expand_dims: true
+
+  # configuration of the validation loaders
+  val:
+    # paths to the validation datasets
+    file_paths:
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0255_488nm_0497241msec_0018715531msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0228_488nm_0444592msec_0018662882msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0152_488nm_0296395msec_0018514685msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0176_488nm_0343194msec_0018561484msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0140_488nm_0272995msec_0018491285msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0158_488nm_0308094msec_0018526384msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0206_488nm_0401693msec_0018619983msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0051_488nm_0099448msec_0018317738msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0353_488nm_0688338msec_0020059681msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0585_488nm_1140730msec_0020512073msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0357_488nm_0696138msec_0020067481msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0537_488nm_1047131msec_0020418474msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0029_488nm_0056549msec_0019427892msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0126_488nm_0245696msec_0019617039msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0326_488nm_0635689msec_0020007032msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0337_488nm_0657138msec_0020028481msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0078_488nm_0152098msec_0019523441msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0376_488nm_0733187msec_0020104530msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0177_488nm_0345144msec_0019716487msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0205_488nm_0399743msec_0019771086msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0251_488nm_0489441msec_0019860784msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0346_488nm_0674688msec_0020046031msecAbs.h5'
+        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0574_488nm_1119280msec_0020490623msecAbs.h5'
+  
+
+    # SliceBuilder configuration
+    slice_builder:
+      # SliceBuilder class
+      name: SliceBuilder
+      # validation patch (can be bigger than train patch since there is no backprop)
+      patch_shape: [64, 160, 160]
+      # validation stride (validation patches doesn't need to overlap)
+      stride_shape: [64, 160, 160]
+
+    # no data augmentation during validation
+    transformer:
+      raw:
+        - name: Standardize
+        - name: ToTensor
+          expand_dims: true
+      label:
+        - name: ToTensor
+          expand_dims: false
