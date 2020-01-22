@@ -219,5 +219,6 @@ loaders:
         - name: ToTensor
           expand_dims: true
       label:
+        - name: Standardize
         - name: ToTensor
-          expand_dims: false
+          expand_dims: true
