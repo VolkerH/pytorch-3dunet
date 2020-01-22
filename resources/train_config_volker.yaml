@@ -143,9 +143,9 @@ loaders:
       # SliceBuilder class
       name: SliceBuilder
       # train patch size given to the network (adapt to fit in your GPU mem, generally the bigger patch the better)
-      patch_shape: [64, 160, 160]
+      patch_shape: [64, 192, 192]
       # train stride between patches
-      stride_shape: [32, 100, 100]
+      stride_shape: [32, 150, 150]
 
     # data transformations/augmentations
     transformer:
@@ -158,8 +158,6 @@ loaders:
           axes: [[2, 1]]
           angle_spectrum: 25
           mode: reflect
-        - name: AdditiveGaussianNoise
-        - name: AdditivePoissonNoise
         - name: ToTensor
           expand_dims: true
       label:
@@ -185,17 +183,6 @@ loaders:
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0140_488nm_0272995msec_0018491285msecAbs.h5'
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0158_488nm_0308094msec_0018526384msecAbs.h5'
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0206_488nm_0401693msec_0018619983msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_1_CamA_ch0_stack0051_488nm_0099448msec_0018317738msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0353_488nm_0688338msec_0020059681msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0585_488nm_1140730msec_0020512073msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0357_488nm_0696138msec_0020067481msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0537_488nm_1047131msec_0020418474msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0029_488nm_0056549msec_0019427892msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0126_488nm_0245696msec_0019617039msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0326_488nm_0635689msec_0020007032msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0337_488nm_0657138msec_0020028481msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0078_488nm_0152098msec_0019523441msecAbs.h5'
-        - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0376_488nm_0733187msec_0020104530msecAbs.h5'
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0177_488nm_0345144msec_0019716487msecAbs.h5'
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0205_488nm_0399743msec_0019771086msecAbs.h5'
         - '/g/ml2018/cryo18/h5/drp1_dendra2_test_2_CamA_ch0_stack0251_488nm_0489441msec_0019860784msecAbs.h5'
@@ -208,9 +195,9 @@ loaders:
       # SliceBuilder class
       name: SliceBuilder
       # validation patch (can be bigger than train patch since there is no backprop)
-      patch_shape: [64, 160, 160]
+      patch_shape: [64, 192, 192]
       # validation stride (validation patches doesn't need to overlap)
-      stride_shape: [64, 160, 160]
+      stride_shape: [64, 192, 192]
 
     # no data augmentation during validation
     transformer:
