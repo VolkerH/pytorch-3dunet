@@ -158,6 +158,10 @@ loaders:
           axes: [[2, 1]]
           angle_spectrum: 25
           mode: reflect
+        - name: AdditiveGaussianNoise
+          execution_probability: 0.5
+        - name: AdditivePoissonNoise
+          execution_probability: 0.5
         - name: ToTensor
           expand_dims: true
       label:
@@ -169,6 +173,10 @@ loaders:
           axes: [[2, 1]]
           angle_spectrum: 25
           mode: reflect
+        - name: AdditiveGaussianNoise
+          execution_probability: 0.5
+        - name: AdditivePoissonNoise
+          execution_probability: 0.5  
         - name: ToTensor
           expand_dims: true
 
